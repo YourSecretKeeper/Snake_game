@@ -5,7 +5,6 @@
 }
 
 body {
-    color: beige;
     background-color: black;
     display: flex;
     align-items: center;
@@ -16,31 +15,58 @@ body {
 .game-container {
     background-color: antiquewhite;
     width: min(95vw, 500px);
-    height: 500px;
-    display: flex;
-    align-items: center;
+    padding: 10px;
     border: 3px solid yellow;
 }
 
 #game-board {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    height: 100%;
+    aspect-ratio: 1 / 1;
+
     display: grid;
+
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
-}
 
+    background-color: white;
+}
 
 .cell {
     border: 1px solid #ddd;
 }
 
 .snake {
-    background: green;
+    background-color: green;
 }
 
 .head {
-    background: darkgreen;
-    border-radius: 0% 50% 50% 0%;
+    background-color: darkgreen;
+}
+
+.food {
+    background-color: red;
+    border-radius: 50%;
+}
+
+.controls {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.controls button {
+    margin: 3px;
+
+    width: 50px;
+    height: 45px;
+
+    font-size: 20px;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background-color: #ddd;
 }

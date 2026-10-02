@@ -1,74 +1,155 @@
-import { Game } from './game.js';
+import { Game } from "./game.js";
+import { setupInput } from "./input.js";
 
-const board = document.getElementById('game-board');
+const board = document.getElementById("game-board");
 
 let game;
 let interval;
 
+
+// Create 20 x 20 board
+
 const createBoard = () => {
+
     board.innerHTML = "";
 
     for (let y = 0; y < game.rows; y++) {
+
         for (let x = 0; x < game.columns; x++) {
 
-            const cell = document.createElement('div');
-            cell.classList.add('cell');  // add a class to the cell for styling
+            const cell = document.createElement("div");
+
+            cell.classList.add("cell");
+
             cell.dataset.x = x;
             cell.dataset.y = y;
+
             board.appendChild(cell);
 
         }
+
     }
-}
 
-const Render = () => {
-    const cells = board.children; // Get all cells in the board
+};
 
-    // Snake
+
+// Render everything
+
+const render = () => {
+
+    const cells = board.children;
+
+
+    // Clear previous rendering
+
+    for (const cell of cells) {
+
+        cell.classList.remove(
+            "snake",
+            "head",
+            "food"
+        );
+
+    }
+
+
+    // Render snake
 
     game.snake
         .getBody()
-        .forEach(
-            (segment, index) => {
+        .forEach((segment, index) => {
 
-                const cell = board.querySelector(
-                    `[data-x="${segment.x}"][data-y="${segment.y}"]`
-                );
+            const cell = board.querySelector(
+                `[data-x="${segment.x}"][data-y="${segment.y}"]`
+            );
 
-                if (!cell) return;
+            if (!cell) {
+                return;
+            }
 
-                cell.classList.add(
-                    "snake"
-                );
+            cell.classList.add("snake");
 
-                if (index === 0) {
 
-                    cell.classList.add(
-                        "head"
-                    );
+            // First segment = head
 
-                }
+            if (index === 0) {
+
+                cell.classList.add("head");
 
             }
-        );
+
+        });
 
 
+    // Render food
 
-}
+    const foodCell = board.querySelector(
+        `[data-x="${game.food.x}"][data-y="${game.food.y}"]`
+    );
+
+
+    if (foodCell) {
+
+        foodCell.classList.add("food");
+
+    }
+
+};
+
+
+// Start game
 
 const startGame = () => {
-    // clearInterval(interval);
 
-    //instance of game
+    clearInterval(interval);
+
+
+    // Create game
+
     game = new Game();
 
-    //craete a board
+
+    // Create board
+
     createBoard();
 
-    //render the snake
-    Render();
+
+    // Initial render
+
+    render();
 
 
-}
+    // Setup controls
+
+    setupInput(direction => {
+
+        game.setDirection(direction);
+
+    });
+
+
+    // Game loop
+
+    interval = setInterval(() => {
+
+        game.update();
+
+        render();
+
+
+        // Stop game when dead
+
+        if (!game.running) {
+
+            clearInterval(interval);
+
+            alert("Game Over!");
+
+        }
+
+    }, game.speed);
+
+};
+
 
 startGame();
